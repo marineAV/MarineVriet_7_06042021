@@ -7,6 +7,9 @@ const helmet = require('helmet'); // Protection des en-têtes HTTP
 const app = express();
 
 const userRoutes = require('./routes/user');
+const fileRoutes = require('./routes/file');
+const profileRoutes = require('./routes/profile')
+const postRoutes = require('./routes/post');
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,6 +23,9 @@ app.use(bodyParser.json());
 app.use(helmet());
 
 app.use('/api', userRoutes);
+app.use('/api', fileRoutes);
+app.use('/api', profileRoutes);
+app.use('/api', postRoutes);
 app.use('/files', express.static(path.join(__dirname, 'files'))); 
 
 module.exports = app;  

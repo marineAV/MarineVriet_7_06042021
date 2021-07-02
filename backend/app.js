@@ -3,8 +3,11 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv').config();
 const path = require('path')
 const helmet = require('helmet'); // Protection des en-têtes HTTP
+const db = require('./models/index')
 
 const app = express();
+ 
+db.sequelize.sync() 
 
 const userRoutes = require('./routes/user');
 const fileRoutes = require('./routes/file');

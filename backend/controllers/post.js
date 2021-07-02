@@ -10,7 +10,7 @@ exports.postArticle = (req, res, next) => {
             id: req.body.id
         }
     })
-    .then(user => {
+    .then(user => { 
         if(user){
                 if(req.file){
                     url = `${req.protocol}://${req.get('host')}/files/${req.file.filename}`
@@ -28,7 +28,7 @@ exports.postArticle = (req, res, next) => {
                     comments == null
                 }
                     model.Post.create({
-                        postId: req.body.id,
+                        UserId: req.body.id,
                         comment: comments,
                         gifs: gifs,
                         file: url
@@ -43,7 +43,7 @@ exports.postArticle = (req, res, next) => {
 exports.updateArticle = (req, res, next) => {
     model.Post.findOne({
         where: {
-            postId: req.params.id
+            UserId: req.params.id
         }
     })
     .then(user => {
@@ -67,7 +67,10 @@ exports.updateArticle = (req, res, next) => {
 
 exports.getArticles = (req, res, next) => {
     model.Post.findAll({
-        include : 'users',
+        include : [{
+            model: model.User,
+            attributes: ['firstName', 'name']
+    }],
         order:[['createdAt','DESC']],
     })
     .then(posts => res.status(200).json(posts))
@@ -78,6 +81,6 @@ exports.deleteArticle = (req, res, next) => {
     model.Post.findOne({
         where: {
             id: req.params.id
-        }
+        }    
     })
 }

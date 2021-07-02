@@ -1,11 +1,12 @@
+const jwtUtils = require('../utils/jwt-utils');
 const model = require('../models')
 const bcrypt = require('bcrypt')
 const fs = require('fs')
 const passwordValidator = require('password-validator');
 const validMail = require('email-validator')
-
+ 
 var schema = new passwordValidator();
-
+ 
 schema      // schéma passwordValidator
 .is().min(7)                     // taille min
 .is().max(30)                    // taille max

@@ -11,4 +11,4 @@ router.put('/article/:id', auth, multer, postCtrl.updateArticle)
 router.get('/article', auth, multer, postCtrl.getArticles)
 router.delete('/article/:id', auth, multer, postCtrl.deleteArticle)
 
-module.exports = router;
+module.exports = router; 

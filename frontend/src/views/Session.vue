@@ -87,7 +87,6 @@ export default {
     border-radius: 10px;
     overflow: hidden;
     font-family: 'Lubalin', serif; 
-    height: 300px; 
     background-color: white;
 }
 .title-box{

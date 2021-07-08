@@ -102,7 +102,10 @@ export default {
                         'Authorization': "Bearer" + " " + token,
                     }
                 })
-                .then(() => { console.log("You have a picture now!") }) 
+                .then(() => { 
+                    console.log("You have a picture now!")
+                    window.location.reload()
+                }) 
                 .catch(error => { console.log(error) })
             }else{
                 axios.put("http://localhost:3000/api/user/photo/" +id, fd, {
@@ -112,8 +115,8 @@ export default {
                 })
                 .then((res) => { 
                     console.log("Your picture have been updated!")
-                    window.location.reload()
                     this.yourfile = res.data.file 
+                    window.location.reload()
                     }) 
                 .catch(error => { console.log(error) })
             }    
@@ -136,7 +139,10 @@ export default {
                         'Authorization': "Bearer" + " " + token,
                     }
                 })
-                .then(() => console.log("Vos infos ont bien été envoyé!"))
+                .then(() => 
+                    console.log("Vos infos ont bien été envoyé!"),
+                    window.location.reload()
+                    )
                 .catch( err => console.log(err))
             } else if ( this.profile !== ""){
                 axios.put("http://localhost:3000/api/profile/" + id, pdata, {
@@ -146,6 +152,7 @@ export default {
                 })
                 .then(res => {
                     console.log(res.data)
+                    window.location.reload()
                 })
                 .catch(err => console.log(err))
 

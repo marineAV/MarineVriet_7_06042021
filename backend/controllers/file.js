@@ -9,7 +9,7 @@ exports.postFile = (req, res, next) => {
     .then(user => {
         if(user){
             model.File.create({
-                userId: req.body.id,
+                UserId: req.body.id,
                 file: `${req.protocol}://${req.get('host')}/files/${req.file.filename}`
             })
             .then(users => res.status(200).json(users))
@@ -22,7 +22,7 @@ exports.postFile = (req, res, next) => {
 exports.updateFile = (req, res, next) => {
     model.File.findOne({
         where: {
-            userId: req.params.id
+            UserId: req.params.id
         }
     })
     .then(user => {
@@ -34,7 +34,7 @@ exports.updateFile = (req, res, next) => {
         },
         {
             where:{ 
-                userId: req.body.id
+                UserId: req.body.id
             }
         })
         .then(user => res.status(200).json(user))
@@ -46,7 +46,7 @@ exports.updateFile = (req, res, next) => {
 exports.getFile = (req, res, next) => {
     model.File.findOne({
         attributes: ['file'],
-        where: { userId: req.params.id}
+        where: { UserId: req.params.id}
     })
     .then(user => res.status(200).json(user))
     .catch(error => res.status(400).json(error))    

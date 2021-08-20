@@ -96,24 +96,3 @@ exports.deleteUser = (req, res, next) => {
     .catch(error => res.status(400).json(error))
 }
 
-// Modification du compte utilisateur
-exports.updateUser = (req, res, next) => {
-    const usersObject = req.file ?
-    {
-        ...JSON.parse(req.body.user),
-        imageUrl: `${req.protocol}://${req.get('host')}/files/${req.file.filename}` 
-    }:{
-        ...req.body
-    };
-    model.User.update(
-        {
-            ...usersObject
-        },
-        {
-        where: {
-            id: req.params.id
-        }
-    })
-    .then(users => res.status(200).json(users))
-    .catch(error => res.status(400).json(error))
-}

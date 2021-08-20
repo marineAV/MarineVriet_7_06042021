@@ -1,6 +1,6 @@
 <template>
     <div class="postBox">
-        <div v-for="item in customItems" :key="item.id" class="posts">
+        <div v-for="item in customItems" :key="item" class="posts">
             <div class="boxTitle">
                 <div class="nameTitle">{{ item.firstName }} {{ item.name }} a écrit :</div>
             </div>
@@ -14,14 +14,21 @@
             </div>
             <div class="logoAndTime">
                 <div class="boxLogo">
-                    <div class="logo"><i class="far fa-heart"></i></div>
-                    <div class="logo"><i class="far fa-thumbs-down"></i></div>
-                    <div class="logo"><i class="far fa-comments"></i></div>
+                    <div><i class="far fa-heart"></i></div>
+                    <div><i class="far fa-thumbs-down"></i></div>
+                    <div><i class="far fa-comments"></i></div>
+                    <div class="logoPencil" @click="formComment=!formComment"><i class="fas fa-pencil-alt" @click="showComments(item.id)"></i></div>
                 </div>
                 <div class="time">
                     <div>Le {{ item.updatedAt }} à {{ item.hour }}</div>
                 </div>
             </div>
+            <form method="POST" class="boxComment" v-show="formComment">
+                <textarea name="comment" id="commentPost" v-model="comment" cols="" rows=""></textarea>
+                <div class="boxButton">
+                    <button @click="sendComments()">Commentez !</button>
+                </div>
+            </form>
         </div>
     </div>
 </template>
@@ -34,20 +41,23 @@ export default {
         return {
             allPosts: [],
             substrTime:"",
-            subTime:""
+            subTime:"",
+            formComment: false,
+            comment:""
         }
     },
     computed: {
         customItems(){
             return this.allPosts.map(item => {
                 return {
+                    id: item.id,
                     gifs: item.gifs,
                     file: item.file,
                     name: item.User.name,
                     firstName: item.User.firstName,
                     comment: item.comment,
                     updatedAt: item.updatedAt.substring(0, 10),
-                    hour: item.updatedAt.substring(12, 19)
+                    hour: item.updatedAt.substring(12, 19),
                 }
             })
         }
@@ -66,6 +76,43 @@ export default {
             console.log(res.data)
             })
         .catch(err => console.log(err.status))
+    },
+    methods: {
+        showComments(n){
+            console.log(n)
+            localStorage.setItem('commentId', n)
+        },
+
+        sendComments(){
+            let token = JSON.parse(localStorage.getItem('token'))
+            let id = JSON.parse(localStorage.getItem('userId'))
+            let commentId = JSON.parse(localStorage.getItem('commentId'))
+
+            let fd = new FormData()
+            fd.append('id', id)
+            fd.append('commentId', commentId)
+            fd.append('comment', this.comment)
+
+            console.log(this.comment)
+
+            if(commentId == undefined || this.comment == ""){
+                alert('Votre commentaire est vide!')
+                }else{
+                    axios.post('http://localhost:3000/api/comment', fd, {
+                        headers: {
+                            'Authorization': "Bearer" + " " + token,
+                        }
+                    })
+                    .then((res) => { localStorage.removeItem('commentId')
+                        if(res){
+                            console.log("comment is registered !")
+                            window.location.reload()
+                        }
+                    })
+                    .catch(error => { console.log(error) })
+                }
+        }
+
     }
 }
 </script>
@@ -83,7 +130,6 @@ export default {
     height: auto;
     display: flex;
     flex-direction: column;
-    background-color: rgb(231, 229, 229);
     margin-top: 10px;
     margin-bottom: 10px;
 }
@@ -91,6 +137,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: 100%;
+    background-color: rgb(231, 229, 229);
 }
 .comment{
     margin: 10px; 
@@ -125,9 +172,12 @@ img{
     display: flex;
     justify-content: center;
 }
-.far{
+.far, .fas{
     font-size: 20px;
-    margin-left: 10px;
+    margin-left: 15px;
+}
+.fa-comments{
+    margin-left: 30px;
 }
 .logoAndTime{
     display: flex;
@@ -135,5 +185,33 @@ img{
     align-items: center;
     padding: 10px;
     background-color: #a5b6c9;
+}
+.logoPencil{
+    cursor: pointer;
+}
+/* comment part */
+.boxComment{
+    margin-top: 10px;
+    width: 100%;
+}
+.boxButton{
+    display: flex;
+    justify-content: flex-end;
+}
+button{
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Lubalin', serif;
+    width: 120px;
+    height: 30px;
+    border: none;
+    border-radius: 30px;
+    color: white;
+    background: linear-gradient(#2c3e50, #141f2b);
+    font-size: 12px;
+}
+#commentPost{
+    width: 100%;
+    height: 50px;
 }
 </style>

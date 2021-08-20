@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       models.User.hasMany(models.Post)
       models.User.hasOne(models.File)
       models.User.hasOne(models.Profile)
-      models.User.hasMany(models.Comment)
+      models.User.hasMany(models.CommentPost)
     }
   };
   User.init({

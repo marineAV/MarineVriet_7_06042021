@@ -65,16 +65,26 @@ exports.updateArticle = (req, res, next) => {
     .catch(error => res.status(500).json(error))    
 }
 
-exports.getArticles = (req, res, next) => {
+exports.getPosts = (req, res, next) => {
     model.Post.findAll({
-        include : [{
+        attributes: ["id", "comment", "file", "gifs", "updatedAt"],
+        include: [{
             model: model.User,
-            attributes: ['firstName', 'name']
-    }],
-        order:[['createdAt','DESC']],
+            attributes:[ "name", "firstName"]
+            },
+            {            
+            model: model.CommentPost,
+            attributes: ["comment", "updatedAt"],
+            include: [{
+                model: model.User,
+                attributes: ["name", "firstName"]
+            }]
+            }    
+        ],
+        order:[['updatedAt','DESC']],
     })
     .then(posts => res.status(200).json(posts))
-    .catch(error => res.status(400).json(error))    
+    .catch(error => res.status(401).json(error))    
 }
 
 exports.deleteArticle = (req, res, next) => {

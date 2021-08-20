@@ -13,6 +13,7 @@ const userRoutes = require('./routes/user');
 const fileRoutes = require('./routes/file');
 const profileRoutes = require('./routes/profile')
 const postRoutes = require('./routes/post');
+const commentRoutes = require('./routes/commentpost')
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -29,6 +30,7 @@ app.use('/api', userRoutes);
 app.use('/api', fileRoutes);
 app.use('/api', profileRoutes);
 app.use('/api', postRoutes);
+app.use('/api', commentRoutes)
 app.use('/files', express.static(path.join(__dirname, 'files'))); 
 
 module.exports = app;  
